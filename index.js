@@ -14,19 +14,20 @@ app.listen(3333, () => console.log("Server running!"))
 
 app.get("/", async (_, res) => {
     const lista = await alimento.find();
+    console.log(lista)
     res.send(lista);
 })
 
-app.put("/one", async (req, res) => {
-    const { produto } = req.body;
+app.get("/:qr", async (req, res) => {
+    const { qr } = req.params;
     try {
-        let info = await alimento.findOne({ produto })
+        let info = await alimento.findOne({ qr })
         // res.sendStatus(200)
-        return res.json([info])
+        console.log(info)
+        return res.json(info)
     } catch (e) {
         res.sendStatus(500)
     }
-
 })
 
 app.post("/", async (req, res) => {
@@ -62,10 +63,10 @@ app.put("/", async (req, res) => {
     }
 });
 
-app.delete("/", async (req, res) => {
-    const { produto } = req.body;
+app.delete("/:qr", async (req, res) => {
+    const { qr } = req.params;
     try {
-        await alimento.findOneAndRemove({ produto });
+        await alimento.findOneAndRemove({ qr });
         res.send(200)
     } catch (e) {
         console.log(e);
