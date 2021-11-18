@@ -8,7 +8,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect("mongodb://localhost:27017/AlimentosIOT")
+mongoose.connect("mongodb://localhost:27017/IoTAlimentos")
 
 app.listen(3333, () => console.log("Server running!"))
 
@@ -17,12 +17,12 @@ app.get("/", async (_, res) => {
     res.send(lista);
 })
 
-app.put("/one", async (req, res) => {
-    const { produto } = req.body;
+app.get("/:produto", async (req, res) => {
+    const { produto } = req.params;
     try {
         let info = await alimento.findOne({ produto })
         // res.sendStatus(200)
-        return res.json([info])
+        return res.json(`o produto de id:${info.id} ${info.produto} é feito na ${info.producao}, distribuido por ${info.distribuidora} e levado ao mercado ${info.mercado}`)
     } catch (e) {
         res.sendStatus(500)
     }
@@ -30,9 +30,9 @@ app.put("/one", async (req, res) => {
 })
 
 app.post("/", async (req, res) => {
-    const { produto, producao, distribuidora, mercado } = req.body;
+    const { id, produto, producao, distribuidora, mercado } = req.body;
     try {
-        const user = new alimento({ produto, producao, distribuidora, mercado });
+        const user = new alimento({ id, produto, producao, distribuidora, mercado });
         const response = await user.save();
         res.sendStatus(200);
     } catch (e) {
