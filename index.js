@@ -8,7 +8,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect("mongodb://localhost:27017/AlimentosIOT")
+mongoose.connect("mongodb://localhost:27017/IoTAlimentos")
 
 app.listen(3333, () => console.log("Server running!"))
 
@@ -31,9 +31,9 @@ app.get("/:qr", async (req, res) => {
 })
 
 app.post("/", async (req, res) => {
-    const { produto, producao, distribuidora, mercado } = req.body;
+    const { id, produto, producao, distribuidora, mercado } = req.body;
     try {
-        const user = new alimento({ produto, producao, distribuidora, mercado });
+        const user = new alimento({ id, produto, producao, distribuidora, mercado });
         const response = await user.save();
         res.sendStatus(200);
     } catch (e) {
